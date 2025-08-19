@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+    - main
+    - release/*
+jobs:
+  count-lines:
+    runs-on: ubuntu-latest
+    steps:
+      - run: wc -l helloworld.js > /tmp/linesofcode.txt
+  Send email:
+  uses: devellany/send-mailer@v1.0.2
+  with:
+    host: smtp.google.com
+      account: ${{secrets.ACCOUNT}}
+      password: ${{secrets.MAIL_PASSWORD}}
+      sender: devellany
+      from: ${{secrets.MAIL_ADDRESS}}
+      to: devellay@dico.me
+      subject: Aantal lijnen.
+      body: in de bijlage staat het aantal lijnen.
+      # Optional content type (defaults to text/plain)
+      contentType: text/plain
+      # Optional attachment files (JSON type. require property 'path')
+      attachments: '[{"/tmp/linesofcode.txt":"linesofcode.txt"}]'
+    
